@@ -9,29 +9,36 @@ Released October 28, 2013
 
 OVERVIEW
 --------
-Breeze Framework is a POWERFUL, ROBUST php framework inspired by java for android, and 
-that lets you think and act like an architect.
-No loss of time by learning big basics or huge awful documentations.
-It comes with only two files and a cli manager, it is as simple as that, let's breathe !!!
-All you have to do is to download extensions you feel comfortable with on Breeze website, or create yours,
-or adapt one insteresting on internet and share it.
-You can download some extensions on http://www.breezeframework.com via the cli manager.
-Every extension is independent, that makes Breeze really scalable and best for both small and big projects.
+Breeze is a SCALABLE, revolutionary php framework inspired by java, that lets you <b>think and code like an architect</b>.<br/>
+The base framework is as simple as stupid, but its philosophy brings you robust possibilities for both tiny and huge projects.<br/>
+NOW, BREATHE PLEASE! No more loss of time learning complex basic structures or huge awful online docs.<br/>
+No more loss of time, searching on forums because of an internal structure bug... Take a breeze now!
 
-!!IMPORTANT!!!
-One more point, Because of its architecture, Breeze will never require a major upgrade, only your extensions
-have to evolve, not the framework.
-Isn't that great and a revolution in the world of frameworks? 
+Breeze simple philosophy (BSP) is that, you must feel really comfortable with each component you use in a framework.<br/>
+So we made a structure only based over extensions that you can download from our website, create or adapt your favorite ones.
+Each extension has its role, is independent and can implement its own cli, so you can build a powerful scalable application.
 
-OK Let's start now !
+EVERYTHING is an extension, even the router, we created one inspired from laravel that you can download from our cli,
+but you can also use a special one you feel really comfortable with, that's the Breeze simple philosophy, the BSP!
+
+If you encounter bugs with an extension, you can quickly use another one that matches your needs today and go on!
+The never seen Breeze revolution comes with two files and a cli (command line interface), and that's all !
+Everything you need already exists on the web, just adapt it to your needs and share the extension on our website.
+
+!!! IMPORTANT THING ABOUT BREEZE MAINTENANCE !!!<br/>
+Its architecture (only three files) never requires major upgrades, so Breeze is here to last and grow smartly, join the community.
+
+OK check it yourself, let's start having fun now !
 
 1) INSTALLING BREEZE
 ----------------------------------
 
 ### Download an Archive File
 
-Simply download an archive file and unpack it under your web server root directory.
-You can download an archive on Github or directly on http://www.breezeframework.com.
+Simply download an archive file and unpack it under your web server root directory.<br/>
+You have two choices:<br/>
+<u>Github</u>: https://github.com/edouardkombo/BreezeFramework<br/> 
+<u>Breeze website</u>: http://www.breezeframework.com/download/breezeframework.zip.
 
 
 2) CHECKING YOUR SYSTEM CONFIGURATION
@@ -40,16 +47,18 @@ You can download an archive on Github or directly on http://www.breezeframework.
 Before starting coding, make sure that your local system is properly
 configured for Breeze.
 
-Target your console to `core` directory of Breeze, from the command line:
+Target your console (on windows, cmd.exe) to `core` directory of Breeze, and type from the command line:
 
     php console -c
+	OR
+	php console --check
 
-this command will check for your php configuration and breeze latest version.
+This command will check for your php configuration (php 5.3 at least), and check for breeze latest version on Breeze website.
 If a new version is available, you will be prompted to download it.
 
 
-Then, open the `index.php` file in 'public_html' folder.
-Here, you will be able to change mode (dev or prod).
+Now, just open the `index.php` file in `\public_html` folder.
+Here, you will be able to change environment mode (dev or prod).
 
 
 3) GETTING STARTED WITH BREEZE
@@ -57,40 +66,49 @@ Here, you will be able to change mode (dev or prod).
 
 Congratulations! You're now ready to use Breeze.
 
-If you think like an architect, of course you do, you have already guessed that,
-we need at least two extensions to run any project.
+But, you are so alone, with only a couple of files. It is here you have to think like an architect!<br/>
+Every project has its own dna, and some extensions will never be useful for all projects.
+In this tutorial, we just need a simple 'Hello World !' (in mvc please).
 
-- Debug console for dev environment
+To do that, my little architect mind tells me I will need at least two kinds of extensions:
+
+- Php Debug console for targeting more precisely php errors in dev environment
 - Router
 
-Well, Breeze has already has these extensions ready for download.
+No problems, Breeze has already implemented the excellent `php_router` From Joseph Lenton (http://phperror.net/),
+and we have built our own router extension.
+These extensions are all available for download on breeze website (http://www.breezeframework.com/extensions/libs/).
+So, let's download them for our project.
 
 Open your command line and type :
 
 	php console -d libs/Php_error
 	php console -d libs/Router
+	OR
+	php console --download libs/Php_Error
+	php console --download libs/Router
 	
 Breeze will download and install:
  - these extensions in the `extensions\libs` directory.
- - these extensions configuration files in the `config\` directory.
+ - them config files (if exist) in the `config\{:extension}.config.php` directory.
+ - them cli (if exist) in the `extensions\cli\{:extension}` directory.
  
-Here, you will find only a "Router.config.php" in the `config\` directory.
-This configuration file will hosts all the routes of the project and will be
-generated and updated automatically.
+For best extension independence, each can implements a personal configuration file that will be loaded by the framework.<br/>
+Here, only the router extension comes with a config file, you will now find it in `config\Router.config.php`.
+Check also, the router cli extension installed in `extensions\cli\Router`.
 
-You will be prompted to upgrade extensions configuration file in `config\Extensions.php`
-You don't have to touch	this file, it will be generated and upgraded automatically.
+Now, you get extensions, you have to tell it to breeze, don't worry, it is done automatically, you will be prompted to upgrade extensions configuration file in `config\Extensions.php`
+You don't have to touch	this file, it will be generated and upgraded automatically each time you download, or build extension.
 
-When you build manually your own extension, you have to upgrade `config\Extensions.php`.
-Breeze lets you do it from command line, just like this:
+To upgrade the extension config file, in your command line just type this, and it will be done:
 
 	php console -r
 	OR
 	php console --refactor
 	
 	
-Well, you can open the downloaded extensions to see the simplicity of Breeze.
-Let's go to next step.
+To learn more about extensions, visit http://www.breezeframework.com.
+Now, let's get our first "Hello World !".
 
 
 4) FIRST HELLO WORLD
@@ -98,67 +116,65 @@ Let's go to next step.
 
 Having your first "Hello World" is magic, really magic.
 
-Breeze has its own cli manager that gives the opportunity to extend an extension cli.
-Wow, hopefully, the router extension has been built with a cli.
-It gives you the ability to generate skeletons.
+Remember, Breeze has its own cli manager and extensions can have their own too !<br/> 
+Also, from Breeze Cli manager, you can call an extension cli, So, you don't have to touch Breeze Core files.
 
-When you code your own extensions, think independent, think community, give a cli to
-your extension to simplify everything.
 
-Well, so, let's generate a first hello world with the Router cli.
-In your command line, type this
+Breeze Router extension let's you build skeleton routes and controllers in minutes.<br/>
+Inspired by java for android, we have chosen to replace "controller" by "activity".<br/>
+Well, so, let's generate our first "Hello World!" now, in your command line, type this
 
 	php console -l Router generate skeleton
 	OR
 	php console --link Router generate skeleton
 	
 You will be prompted to give an activity (controller) name.
-Type 'home' for a default route will hello world.
-Type anything else to generate a crud skeleton.
+Type 'home' for a single default route, with a single activity action.
+Type anything else to generate a complete crud skeleton.
 
- - Open your `src\` folder, you will see your activity (controller) generated.
- - Open your `config\Router.config.php`, yu will generated routes.
+ - Open your `src\` folder, you will see your activity generated (`src\{:activityname}Activity.php`).
+ - Open your `config\Router.config.php`, to see the generated routes.
 
 Now, simply type in your browser 'http://localhost' to see your first hello world. 
 That's it.
 
+!!! IMPORTANT FUN ONE !!!<br/>
+You can uninstall at any moment our router extension, and replace it. Breeze framework is highly customisable and scalable.
+To uninstall an extension, juste type:
+
+	php console -u extension
+	OR
+	php console --uninstall extension
 
 5) GOING FURTHER WITH BREEZE
 -------------------------------
 
-If you don't like our router manager, you can use a router you feel comfortable with
-and adapt it to Breeze.
-To see how to create an extension, report on http://www.breezeframework.com.
+Here we are, you can adapt any extensions that has been thought for php5.3 or later. Need an example?<br/>
+You can implement a phpDataMapper, ACL, Authentication, Template Manager, Request Manager, Session Manager... anything you need,
+The simplest it is, the faster you can reach your goals with fun.
 
-When you build an extension or adapt an interesting one, please, share it on http://www.breezeframework.com.
+More tutorials coming on http://www.breezeframework.com.
+ 
+Help us offering great and fun extensions to the world, share your extensions with us, take a breeze!
 Your experience will help others.
 
-Well, we have other extensions available and more coming soon.
-Visit our website to see them.
-
-FEEL FREE TO PLAY WITH BREEZE.
+Have fun little php architect !
 
 
 
 What's inside Breeze?
 ---------------
-	config/
 	core/
 		App.php
 		Cli.php
 		Console
 		Intercept.php
-	extensions/
-		libs/
-		cli/
-		i18n/
-		schema/
-	src/
-		cache/
-		tmp/
-		views/
+	public_html/
+		.htaccess
+		favicon.ico
+		index.php
 
-Breeze is yours, unleash the power, and... THINK LIKE AN ARCHITECT!
+Breeze is yours now, unleash its great power and TELL IT TO THE WORLD... THINK LIKE AN ARCHITECT!
 
 
 SYSTEM REQUIREMENTS
@@ -170,7 +186,7 @@ QUESTIONS AND FEEDBACK
 An online overview and documentation can be found at
 http://www.breezeframework.com
 
-The Pop PHP Framework is available for anonymous checkout via
-GitHub at https://github.com/nicksagona/PopPHP
+Breeze Framework is also available for anonymous checkout via
+GitHub at https://github.com/edouardkombo/BreezeFramework
 
 Further contact or comments can be emailed to edouard.kombo@gmail.com.
