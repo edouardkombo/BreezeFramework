@@ -1,0 +1,196 @@
+#!/usr/bin/php
+<?php
+namespace core;
+/**
+ * BreezeFramework Command Line Interface
+ *
+ * @package    Console
+ * @author     Edouard Kombo <edouard.kombo@gmail.com>
+ * @copyright (c) 2013 Edouard Kombo 
+ * @license under the MIT license <http://www.opensource.org/licenses/mit-license.php>
+ *
+ * Possible arguments
+ *
+ * -c --check                       Check BreezeFramework version, update if outdated
+ * -d --download extension          Download extension from breezeframework.com        
+ * -e --extend extension method     Call an extension cli method        
+ * -h --help                        Display this help
+ * -i --install extension           Install extension library
+ * -l --link extension method args  call extension cli 
+ * -r --refactor                    Refactor extensions configuration file
+ * -s --show                        Show install instructions
+ * -u --uninstall                   Uninstall extension library
+ * -v --version                     Display Breeze current version
+ */
+
+set_time_limit(0);
+
+
+require '..' . DIRECTORY_SEPARATOR . 'public_html' . DIRECTORY_SEPARATOR . 'index.php';
+use core\Cli as Cli;
+
+//When it is needed to refactor extensions configuration file
+$refactoring_text = 'It is highly recommanded to refactor the extensions configuration file. Refactor it now?';
+
+// Write header
+echo PHP_EOL;
+echo 'Breeze Framework CLI' . PHP_EOL;
+echo '=====================' . PHP_EOL . PHP_EOL;
+
+if (!empty($argv[1])) {
+    // Check for version
+    if (($argv[1] == '-v') || ($argv[1] == '--version')) {
+    
+        echo 'Version Check' . PHP_EOL;
+        echo '-------------' . PHP_EOL;
+        echo 'Actual version: ' . App::$_version . PHP_EOL;
+    
+    // Else, check framework version and update if outdated
+    } else if (($argv[1] == '-c') || ($argv[1] == '--check')) {
+    
+        echo 'Breeze Framework version check' . PHP_EOL;
+        echo '------------------------------' . PHP_EOL;
+        Cli::checkVersion();
+    
+    // Else, display help
+    } else if (($argv[1] == '-h') || ($argv[1] == '--help')) {
+    
+        echo 'Help' . PHP_EOL;
+        echo '----' . PHP_EOL;
+        Cli::cliHelp();
+    
+    // Else, show instructions
+    } else if (($argv[1] == '-s') || ($argv[1] == '--show')) {
+    
+        echo 'Breeze Cli Instructions' . PHP_EOL;
+        echo '----------------------------' . PHP_EOL;
+        Cli::instructions();
+    
+    // Else, Install an extension
+    } else if (($argv[1] == '-i') || ($argv[1] == '--install')) {
+    
+        // Check if the project Cli file argument was passed
+    	// Else, run the Cli process
+    	if (empty($argv[2])) {
+            echo Cli::cliError(4);
+        } else {
+            echo 'Installing Extension library' . PHP_EOL;
+            echo '----------------------------' . PHP_EOL;
+            (array) $dirAndFile = findExtensionDirAndManifest($argv[2]); //0 = file, 1=dir
+            
+            //If install successful, purpose to refactor the extensions configuration file
+            if (Cli::install($dirAndFile[0], $dirAndFile[1], $argv[2])){
+        		
+        		$input = Cli::cliInput($refactoring_text);
+        		if ($input == 'y'){
+        			Cli::refactor();
+        		}            
+            }
+        }
+    
+    // Else, Uninstall an extension
+    } else if (($argv[1] == '-u') || ($argv[1] == '--uninstall')) {
+    
+        // Check if the project Cli file argument was passed
+    	// Else, run the Cli process
+    	if (empty($argv[2])) {
+            echo Cli::cliError(10);
+        } else {
+            echo 'Uninstalling Extension library' . PHP_EOL;
+            echo '------------------------------' . PHP_EOL;
+            (array) $dirAndFile = findExtensionDirAndManifest($argv[2]); //0 = file, 1=dir
+            
+            //If uninstall successful, purpose to refactor the extensions configuration file
+            if (Cli::uninstall($dirAndFile[0], $dirAndFile[1], $argv[2])){
+        		
+        		$input = Cli::cliInput($refactoring_text);
+        		if ($input == 'y'){
+        			Cli::refactor();
+        		}            
+            }
+        }
+    
+    //Download extension from http://www.breezeframework.com
+    } else if (($argv[1] == '-d') || ($argv[1] == '--download')) {
+    
+        // Check if the project Cli file argument was passed
+    	// Else, run the Cli process
+    	if (empty($argv[2])) {
+            echo Cli::cliError(12);
+        } else {
+            echo 'Downloading Extension library' . PHP_EOL;
+            echo '-----------------------------' . PHP_EOL;           
+          	
+          	if (Cli::download($argv[2])) {
+	            //Purpose user to directly install this extension
+	            $input = Cli::cliInput('Install this extension now?');
+	            if ($input == 'y'){
+	             	
+	             	$extension = explode('/', $argv[2]);
+	             	(array) $dirAndFile = findExtensionDirAndManifest($extension[1]); //0 = file, 1=dir
+	            	
+	            	//If install successfull, purpose to refactor the extensions config file
+	            	if (Cli::install($dirAndFile[0], $dirAndFile[1], $extension[1]) ){
+	            		
+	            		$input = Cli::cliInput($refactoring_text);
+	            		if ($input == 'y'){
+	            			Cli::refactor();
+	            		}
+	            	}           	
+	            }
+            }
+        }
+    
+    //Refactor extension loader configuration file
+    } else if (($argv[1] == '-r') || ($argv[1] == '--refactor')) {
+    
+        // Check if the project Cli file argument was passed
+    	// Else, run the Cli process
+    	if (!empty($argv[2])) {
+            echo Cli::cliError(14);
+        } else {
+            echo 'Refactoring extensions loader file' . PHP_EOL;
+            echo '----------------------------------' . PHP_EOL;           
+          	
+          	Cli::refactor();
+        }
+        
+    //Link to an extension cli
+    } else if (($argv[1] == '-l') || ($argv[1] == '--link')) {
+    
+        // Check if the project Cli file argument was passed
+    	// Else, run the Cli process
+    	if (empty($argv[3]) || empty($argv[4])) {
+            echo Cli::cliError(16);
+        } else {
+            echo 'Own '.$argv[2].' extension cli' . PHP_EOL;
+            echo '----------------------------------' . PHP_EOL;           
+          	
+          	Cli::link($argv[2],$argv[3],$argv[4]);
+        }
+        
+                        
+    } else {
+    
+    	// Else, unknown option passed
+        echo Cli::cliError(5, $argv[1]);
+    }
+
+} else {
+
+	// Else, no option passed
+    echo Cli::cliError(6);
+}
+
+function findExtensionDirAndManifest($var){
+	
+    $dir = App::$_base_path . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR . $var . DIRECTORY_SEPARATOR;
+    $file = $dir . 'Manifest.php';
+    if (!file_exists($file)) {
+        echo 'The Manifest extension file \'' . $file . '\' does not exist. IT IS MANDATORY !' . PHP_EOL . PHP_EOL;
+        exit(0);
+    }else{
+    	require $file;
+    }
+    return array($file, $dir);	
+}

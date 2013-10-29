@@ -1,0 +1,7 @@
+# it is recommended to set the environment in your vhost instead of .htaccess
+php_flag magic_quotes_gpc Off
+RewriteEngine On
+RewriteRule ^.htaccess$ - [F,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule \.*$ /index.php [NC,L]
