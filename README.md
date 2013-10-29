@@ -38,7 +38,7 @@ OK check it yourself, let's start having fun now !
 Simply download an archive file and unpack it under your web server root directory.<br/>
 You have two choices:<br/>
 <u>Github</u>: https://github.com/edouardkombo/BreezeFramework<br/> 
-<u>Breeze website</u>: http://www.breezeframework.com/download/breezeframework.zip.
+<u>Breeze website</u>: http://www.breezeframework.com/download/breezeFramework.zip.
 
 
 2) CHECKING YOUR SYSTEM CONFIGURATION
