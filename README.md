@@ -97,8 +97,8 @@ For best extension independence, each can implements a personal configuration fi
 Here, only the router extension comes with a config file, you will now find it in `config\Router.config.php`.
 Check also, the router cli extension installed in `extensions\cli\Router`.
 
-Now, you get extensions, you have to tell it to breeze, don't worry, it is done automatically, you will be prompted to upgrade extensions configuration file in `config\Extensions.php`
-You don't have to touch	this file, it will be generated and upgraded automatically each time you download, or build extension.
+Now, you've got extensions, you have to tell it to breeze, don't worry, it is done automatically, you will be prompted to upgrade extensions configuration file in `config\Extensions.php`
+You don't have to touch	this file, it will be generated and upgraded automatically each time you download, or build an extension.
 
 To upgrade the extension config file, in your command line just type this, and it will be done:
 
@@ -142,24 +142,29 @@ That's it.
 You can uninstall at any moment our router extension, and replace it. Breeze framework is highly customisable and scalable.
 To uninstall an extension, juste type:
 
-	php console -u extension
+	php console -u extension_name
 	OR
-	php console --uninstall extension
+	php console --uninstall extension_name
 
 5) GOING FURTHER WITH BREEZE
 -------------------------------
 
 Here we are, you can adapt any extensions that has been thought for php5.3 or later. Need an example?<br/>
-You can implement a phpDataMapper, ACL, Authentication, Template Manager, Request Manager, Session Manager... anything you need,
+You can implement a
+- phpDataMapper
+- ACL
+- Authentication
+- Template Manager
+- Request Manager
+- Session Manager
+- ...and so more matching your needs
+
 The simplest it is, the faster you can reach your goals with fun.
 
 More tutorials coming on http://www.breezeframework.com.
  
 Help us offering great and fun extensions to the world, share your extensions with us, take a breeze!
 Your experience will help others.
-
-Have fun little php architect !
-
 
 
 What's inside Breeze?
