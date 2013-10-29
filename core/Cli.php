@@ -113,42 +113,6 @@ class Cli
     	return true;
     }    
     
-    /**
-     * 
-     * @param string $val
-     * @param string $type
-     * @param string $directory
-     * @param string $extension
-     * @return void
-     */
-    private static function copyDependency($val, $type, $directory, $extension){
-
-    	//Clean directory_separator
-    	(string) $val = str_replace('/', DIRECTORY_SEPARATOR, $val);
-    	 
-    	//GET FULL PATH
-    	(string) $file = $directory . $val;
-
-    	//Get new patth
-    	if ($type == 'config'){
-    		
-    		(string) $newPath = App::$_base_path . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $extension . '.config.php';
-    	} else {
-    		
-    		(string) $newPath = App::$_base_path . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'cli' . DIRECTORY_SEPARATOR . $extension;
-    	}
-		
-    	//Copy
-    	if ( copy($file, $newPath)) {
-    	
-   			echo "Copying $newPath directory //OK" . PHP_EOL;    		
-   		} else {
-    			
-    		echo self::cliError(9, $newPath);
-    		return false;
-    	}    	
-    }
-    
     
     /**
      * Install extension by his manifest file
@@ -188,6 +152,49 @@ class Cli
     	
     	return true;
     }
+    
+    
+    /**
+     *
+     * @param string $val
+     * @param string $type
+     * @param string $directory
+     * @param string $extension
+     * @return void
+     */
+    private static function copyDependency($val, $type, $directory, $extension){
+    
+    	//Clean directory_separator
+    	(string) $val = str_replace('/', DIRECTORY_SEPARATOR, $val);
+    
+    	//GET FULL PATH
+    	(string) $file = $directory . $val;
+    
+    	//Get new patth
+    	if ($type == 'config'){
+    
+    		(string) $newPath = App::$_base_path . DIRECTORY_SEPARATOR . 'config';
+    		(string) $newFile = $newPath . DIRECTORY_SEPARATOR . $extension .'.config.php';
+    		 
+    	} else {
+    
+    		(string) $newPath = App::$_base_path . DIRECTORY_SEPARATOR . 'extensions' . DIRECTORY_SEPARATOR . 'cli';
+    		(string) $newFile = $newPath . DIRECTORY_SEPARATOR . $extension;
+    	}
+    	
+    	//Test Path existence
+    	self::testPath($newPath);
+    	 
+    	//Copy
+    	if (copy($file, $newFile)) {
+    		 
+    		echo "Copying $newFile directory //OK" . PHP_EOL;
+    	} else {
+    	 
+    		echo self::cliError(9, $newFile);
+    		return false;
+    	}
+    }    
     
     
     /**
@@ -317,7 +324,7 @@ class Cli
     private static function download_process($download_url, $name, $type){
     	
     	//Get file, if file doesn't exists, show an error
-    	$file = @file_get_contents($download_url);
+    	$file = file_get_contents($download_url);
     	if (false == $file) { echo self::cliError(11, $download_url); return false; }
     	 
     	//Clean $name separator
@@ -329,6 +336,10 @@ class Cli
     	} else {
     		$path = App::$_base_path . DIRECTORY_SEPARATOR;
     	}
+    	
+    	//Test path existence
+    	self::testPath($path);
+    	
     	$zipFile = $path . '.zip';
     	file_put_contents($zipFile, $file);
     	 
@@ -435,7 +446,8 @@ class Cli
 	    		}
     		}    		
     	}
-    	
+  
+    	//If there are extensions, we can update
     	if (!empty($extensions)){
     		
 	    	$extensionsKeys = array_keys($extensions);
@@ -481,7 +493,10 @@ class Cli
 	    	$content .= '}'."\n";
 
 	    	//Insert content in file
-	    	$filename = App::$_base_path . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'Extensions.php';
+	    	$filePath = App::$_base_path . DIRECTORY_SEPARATOR . 'config';
+	    	self::testPath($filePath);
+	    	$filename = $filePath . DIRECTORY_SEPARATOR . 'Extensions.php';	    	
+	    	
 	    	if ( file_put_contents($filename, $content) ){
 	    		
 	    		self::parseFile($filename, 'Writing line ');
@@ -493,11 +508,35 @@ class Cli
 	    		echo self::cliError(15, $filename);
 	    		return false;
 	    	}
+    	
+    	} else {
+    		
+    		//If no extension has been found, there is no need to keep the config\extensions.php if exists
+    		//So, we delete it
+    		//We also delete the extensions directory if exists
+    		
+    		(string) $extensionsDir = App::$_base_path . DIRECTORY_SEPARATOR . 'extensions';
+    		(string) $configDir = App::$_base_path . DIRECTORY_SEPARATOR . 'config'; 
+    		
+    		if(is_dir($extensionsDir)){ self::removeDir($extensionsDir); }
+    		if(is_dir($configDir)){ self::removeDir($configDir); }
+    		
+    		return true;
     	}
     }    
     
-    
-    
+    /**
+     * Test a path existence, and create recursive directories if needed 
+     * 
+     * @param string $path
+     * @return boolean
+     */
+    public static function testPath( $path ){
+    	
+    	if( !is_dir($path)){
+    		return mkdir($path, 0, true);
+    	}
+    }
     
     /**
      * Display CLI instructions
