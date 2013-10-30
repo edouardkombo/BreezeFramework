@@ -1,9 +1,9 @@
-Welcome to Breeze Framework 1.0.0 Release!
+Welcome to Breeze Framework 1.0.1 Release!
 ===============================================
 
 RELEASE INFORMATION
 -------------------
-Breeze Framework 1.0.0 Release  
+Breeze Framework 1.0.1 Release  
 Released October 28, 2013
 
 
