@@ -284,7 +284,7 @@ class Cli
     	 
     	(int) $current_version = App::$_version;
     	(string) $file_version = self::$_download_framework_url . 'version.txt';
-    	(string) $framework_url = self::$_download_framework_url . 'breezeframework.zip';
+    	(string) $framework_url = self::$_download_framework_url . 'BreezeFramework.zip';
     	(int) $online_version = file_get_contents($file_version);
 
     	if (version_compare(PHP_VERSION, '5.3.0') >= 0){
